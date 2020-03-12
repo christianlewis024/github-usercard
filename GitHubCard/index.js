@@ -53,3 +53,59 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+function makeCard(data) {
+  const newCard = document.createElement("div"),
+    newImg = document.createElement("img"),
+    newCardInfo = document.createElement("div"),
+    name = document.createElement("h3"),
+    username = document.createElement("p"),
+    location = document.createElement("p"),
+    profile = document.createElement("p"),
+    profileUrl = document.createElement("a"),
+    followers = document.createElement("p"),
+    following = document.createElement("p"),
+    bio = document.createElement("p");
+
+  newCard.appendChild(newImg);
+  newCard.appendChild(newCardInfo);
+  newCardInfo.appendChild(name);
+  newCardInfo.appendChild(username);
+  newCardInfo.appendChild(location);
+  newCardInfo.appendChild(profile);
+  newCardInfo.appendChild(profileUrl);
+  newCardInfo.appendChild(followers);
+  newCardInfo.appendChild(following);
+  newCardInfo.appendChild(bio);
+
+  newCard.classList.add("card");
+  newCardInfo.classList.add("card-info");
+  name.classList.add("name");
+  username.classList.add("username");
+
+  newImg.src = data.avatar_url;
+  username.textContent = data.login;
+  followers.textContent = "followers: " + data.followers;
+  following.textContent = "following: " + data.following;
+  name.textContent = data.name;
+  location.textContent = data.location;
+  profileUrl.textContent = data.url;
+  profileUrl.href = data.url;
+  profile.textContent = "Profile:";
+  bio.textContent = `Bio: ${data.bio}`;
+  return newCard;
+}
+
+const cards = document.querySelector(".cards");
+axios
+  .get("https://api.github.com/users/christianlewis024")
+  .then(function(response) {
+    const myCard = makeCard(response.data);
+    cards.appendChild(myCard);
+    console.log(response.data);
+    return response.data.followers_url;
+  })
+
+  .catch(function(error) {
+    console.log("data not returned", error);
+  });
