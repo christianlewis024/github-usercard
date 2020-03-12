@@ -94,8 +94,6 @@ function makeCard(data) {
   return newCard;
 }
 
-const entryPoint = document.querySelector(".cards");
-
 const cards = document.querySelector(".cards");
 
 axios.get("https://api.github.com/users/christianlewis024").then(response => {
