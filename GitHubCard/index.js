@@ -24,8 +24,6 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
@@ -53,3 +51,71 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+function makeCard(data) {
+  const newCard = document.createElement("div"),
+    newImg = document.createElement("img"),
+    newCardInfo = document.createElement("div"),
+    name = document.createElement("h3"),
+    username = document.createElement("p"),
+    location = document.createElement("p"),
+    profile = document.createElement("p"),
+    profileUrl = document.createElement("a"),
+    followers = document.createElement("p"),
+    following = document.createElement("p"),
+    bio = document.createElement("p");
+
+  newImg.src = data.avatar_url;
+  name.textContent = data.name;
+  username.textContent = data.login;
+  location.textContent = `Location: ${data.location}`;
+  profile.textContent = `Profile: ${data.name}`;
+  profileUrl.textContent = `Link: ${data.html_url}`;
+  followers.textContent = `Followers: ${data.followers}`;
+  following.textContent = `Following: ${data.following}`;
+  bio.textContent = `Bio: ${data.bio}`;
+
+  newCard.appendChild(newImg);
+  newCard.appendChild(newCardInfo);
+  newCardInfo.appendChild(name);
+  newCardInfo.appendChild(username);
+  newCardInfo.appendChild(location);
+  newCardInfo.appendChild(profile);
+  newCardInfo.appendChild(followers);
+  newCardInfo.appendChild(following);
+  newCardInfo.appendChild(bio);
+  newCardInfo.appendChild(profileUrl);
+
+  newCard.classList.add("card");
+  newCardInfo.classList.add("card-info");
+  name.classList.add("name");
+  username.classList.add("username");
+
+  return newCard;
+}
+
+const cards = document.querySelector(".cards");
+
+axios.get("https://api.github.com/users/christianlewis024").then(response => {
+  console.log(response.data);
+  cards.appendChild(makeCard(response.data));
+});
+
+const followersArray = [
+  "Riley-Robinson",
+  "chelsabeth",
+  "mjschuette4",
+  "Alfredov96",
+  "leachcoding"
+];
+followersArray.forEach(follower => {
+  axios
+    .get(`https://api.github.com/users/${follower}`)
+    .then(response => {
+      console.log(response);
+      cards.append(makeCard(response.data));
+    })
+    .catch(error => {
+      console.log(error);
+    });
+});
